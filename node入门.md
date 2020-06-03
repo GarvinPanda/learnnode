@@ -39,7 +39,7 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 
 `npm install ~ `
 
-##### $\color{#FF3030}{gulp}$
+##### gulp
 
 `const gulp = require('gulp');`
 
@@ -138,7 +138,7 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 ```javascript
     const http = require("http");
     const app = http.createServer();
-    app.on('request',(req,res) =##### {
+    app.on('request',(req,res) => {
         res.send("<h1>hi,user!</h1>");
     });
     app.listen(3000);
@@ -146,6 +146,220 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 ```
 
 #### 2、http协议
+
+##### 报文
+
+> 在http请求和响应的过程中传递的数据块就叫做报文,包括传送的数据和一些附加信息,并且要遵守规定好的格式.
+
+##### 请求报文
+
+请求方式 `GET` `POST`
+
+请求地址 
+
+```javascript
+
+    app.on('request',(req,res) => {
+
+        req.headers //获取请求报文
+        req.url //获取请求地址
+        req.method //获取请求方法
+
+    });
+```
+
+##### 响应报文
+
+http状态码
+- 200 请求成功
+- 404 请求的资源没有被找到
+- 500 服务器端错误
+- 400 客户端请求有错误
+
+内容类型
+- text/html
+- text/css
+- application/javascript
+- image/jpeg
+- application/json
+
+```javascript
+
+    app.on('request',(req,res) => {
+
+        res.writeHead(200, {
+            'Content-Type': 'text/html;charset=utf8'
+        });
+
+    });
+
+```
+
+设置响应头
+
+`response.setHeader('Content-Type','text/html');`
+
+当使用`response.setHeader()`设置响应头时,他们将与传给`response.writeHead()`的任何响应头合并,其中`response.writeHead()`的响应头优先.
+
+##### http请求与响应处理
+
+###### 1.GET请求参数处理
+
+- 参数被放置在浏览器地址中,例如：`http://localhost:3000?name=xx&age=22`;
+- 参数获取需要借助系统模块`url`,`url`模块用来处理`url`地址.
+
+```javascript
+
+    const http = require('http');
+    const url = require('url');
+    const app = http.createServer();
+    app.on('request',(req,res) => {
+        let { query } = url.parse(req.url,true);
+    });
+    app.listen(3000);
+
+```
+
+###### 2.POST请求参数
+
+- 参数被放置在请求体中传输.
+- 获取POST参数需要使用data事件和end事件.
+- 使用`querystring`系统模块将参数转换成对象格式.
+
+```javascript
+
+    const http = require('http');
+    const app = http.createServer();
+    const querystring = require('querystring');
+    app.on('request',(req,res) => {
+        let postParams = '';
+        req.on('data',params => {
+            postParams += params;
+        };
+        req.on('end',() => {
+            console.log(querystring.parse(postParams));
+        });
+    });
+    app.listen(3000);
+
+```
+
+##### 路由
+
+路由是指客户端请求地址与服务端程序代码的对应关系.请求什么响应什么.
+
+```javascript
+
+    app.on('request',(req,res) => {
+        //获取客户端的请求路径
+        let { pathname } = url.parse(req.url);
+        if(pathname == '/' || pathname == '/index')
+        {
+            res.end('欢迎来到首页!');
+        }
+        else if(pathname == '/list')
+        {
+            res.end('欢迎来到列表页!');
+        }
+        else
+        {
+            res.end('抱歉!您访问的页面出游了!');
+        }
+    });
+
+```
+##### 静态资源与动态资源
+
+- 服务器端不需要处理,可以直接响应给客户端的资源就是静态资源,例如css,js,image等.
+- 相同的请求地址不同的响应资源,这种资源就是动态资源.
+
+### 三、nodejs异步编程
+
+- 使用回调函数获取异步API执行结果
+- 回调地狱
+- promise
+- 异步函数async
+
+异步函数是异步编程语法的终极解决方案,它可以让我们将异步代码写成同步的形式,让代码不再有回调函数嵌套,使代码清晰明了.
+
+```javascript
+
+    const fn = async () => {}
+
+    async function fn() {} 
+
+```
+
+##### async 关键字
+
+1.普通函数定义前加async关键字,普通函数变成异步函数.
+2.异步函数默认返回promise对象.
+3.在异步函数内部使用return关键字进行结果返回,return关键字代替resolve方法.
+4.在异步函数内部使用throw抛出程序异常
+5.调用异步函数再链式调用then方法获取异步执行结果.
+6.调用异步函数再链式调用catch方法获取异步函数执行的错误信息.
+
+##### await 关键字
+
+1.await关键字只能出现在异步函数中
+2.await后面只能写promise对象
+3.await关键字可以暂停异步函数向下执行,直到promise返回结果 
+
+
+### 四、mongoDB
+
+#### 环境搭建
+
+- 使用Node.js操作MongoDB数据库需要依赖NodeJs第三方包mongoose
+- 项目目录下使用`npm install mongoose`命令下载
+- 使用`net start mongoDB`启动数据库服务
+
+```javascript
+
+    const mongoose = require("mongoose");
+    mongoose.connect('mongondb://localhost/playround',{
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    })
+    .then(() => console.log("数据库连接成功"))
+    .then(() => console.log("数据库连接失败"));
+
+    const courseSchema = new mongoose.Schema({
+        name: String,
+        author: String,
+        isPublished: Boolean
+    });
+
+    const Course = mongoose.model("Course",courseSchema);
+
+    Course.create({
+        name: "xxr",
+        author: "xdq",
+        isPublished: false
+    })
+    .then(result => {
+        console.log(result)
+    });
+
+    Course.save();
+
+```
+#### mongoose验证
+
+> 创建集合规则时,可以设置当前字段的验证规则,验证失败则输入插入失败
+
+- required: true 必传字段
+- minlength: 3 字符串最小长度
+- maxlength: 20 字符串最大长度
+- min: 2 数值最小为2
+- max: 100 数值最大为100
+- enum: ['html','css','javascript','nodejs']
+- trim: true 去除字符串两边的空格
+- validate: 自定义验证器
+- default: 默认值
+- message: 自定义错误信息
+
+获取错误信息: error.errors['字段名称'].message
 
 
 
