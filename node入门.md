@@ -19,87 +19,89 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 
 ##### fs --- 文件系统
 
-   `const fs = require('fs');`
+`const fs = require('fs');`
 
-   读取文件内容
+读取文件内容
 
-   `fs.readFile('文件路径/文件名称','文件编码',callback);`
+`fs.readFile('文件路径/文件名称','文件编码',callback);`
 
 ##### path --- 文件路径模块
 
-   `const path = require('path');`
+`const path = require('path');`
 
-   拼接文件路径
+拼接文件路径
 
-   `path.join('node','hello.js');`
+`path.join('node','hello.js');`
 
-   大多数情况使用绝对路径.  `__dirname`获取当前文件的绝对路径. 
+大多数情况使用绝对路径.  `__dirname`获取当前文件的绝对路径. 
 
 #### 3、第三方模块
 
-   `npm install ~ `
+`npm install ~ `
 
-##### gulp
+```diff 
+    ! gulp
+```
 
-   `const gulp = require('gulp');`
+`const gulp = require('gulp');`
 
-   基于Node平台开发的前端构建工具
+基于Node平台开发的前端构建工具
 
-   - 项目上线、html、css、js文件压缩合并
-   - 语法转换(ES6、less)
-   - 公共文件抽离
-   - 修改文件浏览器自动刷新
+- 项目上线、html、css、js文件压缩合并
+- 语法转换(ES6、less)
+- 公共文件抽离
+- 修改文件浏览器自动刷新
 
 ##### config
 
-   `const config = require('config');`
+`const config = require('config');`
 
-   允许开发人员将不同运行环境下的应用配置信息抽离到单独的文件中，模块内部自动判断当前应用的运行环境，并读取对应的配置信息，极大提供应用配置信息的维护成本，避免了当运行环境重复的多次切换时，手动到项目代码中修改配置信息.
+允许开发人员将不同运行环境下的应用配置信息抽离到单独的文件中，模块内部自动判断当前应用的运行环境，并读取对应的配置信息，极大提供应用配置信息的维护成本，避免了当运行环境重复的多次切换时，手动到项目代码中修改配置信息.
 
 ##### bcrypt
 
 依赖环境
 
-   - python 2.x
+- python 2.x
 
-   - node-gyp
+- node-gyp
 
-      `npm install -g node-gyp`
+    `npm install -g node-gyp`
 
-   - windows-build-tools
+- windows-build-tools
 
-      `npm install --global --production windows-build-tools`
+    `npm install --global --production windows-build-tools`
 
-   ```javascript
-      // 导入bcrypt模块
-      const bcrypt = require('bcrypt');
-      // 生成随机字符串 gen =##### generate 生成 salt 盐
-      let salt = await bcrypt.genSalt(10);
-      // 使用随机字符串对密码进行加密
-      let pass = await bcrypt.hash('明文密码', salt);
-      // 密码比对
-      let isEqual = await bcrypt.compare('明文密码', '加密密码');
-   ```
+```javascript
+    // 导入bcrypt模块
+    const bcrypt = require('bcrypt');
+    // 生成随机字符串 gen =##### generate 生成 salt 盐
+    let salt = await bcrypt.genSalt(10);
+    // 使用随机字符串对密码进行加密
+    let pass = await bcrypt.hash('明文密码', salt);
+    // 密码比对
+    let isEqual = await bcrypt.compare('明文密码', '加密密码');
+```
 
 ##### joi
 
-   定义用户信息规则
+定义用户信息规则
 
 ##### formidable
 
-   解析表单规则
+解析表单规则
 
 ##### package.json
 
-   使用 `npm init`生成
+使用 `npm init`生成
 
-   - 项目依赖
+- 项目依赖
 
-    `dependencies`
+`dependencies`
 
-   - 开发依赖
+- 开发依赖
 
-    `devdependencies`
+`devdependencies`
 
 #### 5、模块加载机制
 
