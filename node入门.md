@@ -70,7 +70,7 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 
       `npm install --global --production windows-build-tools`
 
-   ```
+   ```javascript
       // 导入bcrypt模块
       const bcrypt = require('bcrypt');
       // 生成随机字符串 gen =##### generate 生成 salt 盐
@@ -135,7 +135,7 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 
 #### 1、简单服务器
 
-```
+```javascript
     const http = require("http");
     const app = http.createServer();
     app.on('request',(req,res) =##### {
