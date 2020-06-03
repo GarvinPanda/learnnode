@@ -39,9 +39,7 @@ NodeJs是由ECMAScript以及Node环境提供的一些附加API组成的，包括
 
 `npm install ~ `
 
-```diff 
-    ! gulp
-```
+##### $\color{#FF3030}{gulp}$
 
 `const gulp = require('gulp');`
 
